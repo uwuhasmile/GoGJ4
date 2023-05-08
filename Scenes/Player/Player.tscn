@@ -63,4 +63,8 @@ collision_mask = 4
 [node name="Invincibility" type="Timer" parent="."]
 one_shot = true
 
+[node name="AudioListener2D" type="AudioListener2D" parent="."]
+position = Vector2(0, -16)
+current = true
+
 [connection signal="taken_damage" from="Hitbox" to="." method="_on_taken_damage"]

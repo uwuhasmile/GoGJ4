@@ -1,9 +1,12 @@
 extends RigidBody2D
 class_name PlayerOrb
 
+const BOUNCE_STREAM: AudioStream = preload("res://Assets/Sounds/orb_bounce.ogg");
+
 @export var start_holder: OrbHolder;
 
 @onready var collision: CollisionShape2D = $CollisionShape2D;
+@onready var sound_player: AudioStreamPlayer2D = $SoundPlayer;
 
 var holder: OrbHolder = null;
 var _tp: bool = false;
@@ -47,6 +50,8 @@ func push(n: Vector2, power: float = 1.0) -> void:
 
 
 func _on_body_entered(body: Node) -> void:
+	sound_player.stream = BOUNCE_STREAM;
+	sound_player.play();
 	if (body.has_method(&"take_damage")):
 		var result: DamageResult = DamageResult.new(25.0, self, self, linear_velocity);
 		body.take_damage(result);

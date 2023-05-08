@@ -33,6 +33,7 @@ func hold(orb: PlayerOrb) -> void:
 	_orb.disable();
 	_orb.global_position = global_position;
 	_orb.teleport(global_position);
+	_orb.visible = false;
 	hold_timer.start(randf_range(min_hold_time, max_hold_time));
 
 
@@ -41,4 +42,5 @@ func release() -> void:
 	_orb.enable();
 	_orb.linear_velocity = spawn_velocity;
 	hold_timer.stop();
+	_orb.visible = true;
 	_orb = null;

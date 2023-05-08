@@ -27,4 +27,9 @@ texture = ExtResource("2_ga0cd")
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("CircleShape2D_spxjc")
 
+[node name="SoundPlayer" type="AudioStreamPlayer2D" parent="."]
+max_distance = 500.0
+attenuation = 0.707107
+bus = &"SFX"
+
 [connection signal="body_entered" from="." to="." method="_on_body_entered"]

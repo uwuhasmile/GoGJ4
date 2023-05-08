@@ -15,6 +15,10 @@ run/main_scene="res://Scenes/Levels/TestLevel.tscn"
 config/features=PackedStringArray("4.0", "Mobile")
 config/icon="res://icon.svg"
 
+[autoload]
+
+MusicPlayer="*res://Scenes/Global/MusicPlayer.tscn"
+
 [display]
 
 window/size/viewport_width=480

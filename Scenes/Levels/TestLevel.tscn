@@ -1,9 +1,11 @@
-[gd_scene load_steps=8 format=3 uid="uid://b1yftwkwl52fo"]
+[gd_scene load_steps=10 format=3 uid="uid://b1yftwkwl52fo"]
 
 [ext_resource type="PackedScene" uid="uid://3qkgiwokegld" path="res://Scenes/Gameplay/Tile.tscn" id="1_5r875"]
 [ext_resource type="PackedScene" uid="uid://d27ck4n2p8k5q" path="res://Scenes/Player/Player.tscn" id="1_srjsv"]
 [ext_resource type="PackedScene" uid="uid://b38n21fhsnhmb" path="res://Scenes/Player/PlayerOrb.tscn" id="2_gfe3q"]
 [ext_resource type="PackedScene" uid="uid://dproxk1e7cqri" path="res://Scenes/Gameplay/OrbHolder.tscn" id="4_1ile8"]
+[ext_resource type="Script" path="res://Scripts/Node/MusicPlayer.gd" id="5_n8jmu"]
+[ext_resource type="AudioStream" uid="uid://ks4cx3rsnvd7" path="res://Assets/Music/s1to5.ogg" id="6_ttlmt"]
 
 [sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_ykr4y"]
 size = Vector2(32, 32)
@@ -81,3 +83,7 @@ position = Vector2(144, 144)
 [node name="Tile5" parent="." instance=ExtResource("1_5r875")]
 position = Vector2(112, 112)
 count = 2
+
+[node name="Node" type="Node" parent="."]
+script = ExtResource("5_n8jmu")
+stream = ExtResource("6_ttlmt")
