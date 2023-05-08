@@ -1,0 +1,30 @@
+[gd_scene load_steps=5 format=3 uid="uid://b38n21fhsnhmb"]
+
+[ext_resource type="Script" path="res://Scenes/Player/PlayerOrb.gd" id="1_evwjx"]
+[ext_resource type="Texture2D" uid="uid://2r72k3bjqxkt" path="res://Assets/Sprites/Gameplay/orb.png" id="2_ga0cd"]
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_j8m6s"]
+friction = 0.0
+bounce = 1.0
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_spxjc"]
+radius = 11.0
+
+[node name="PlayerOrb" type="RigidBody2D"]
+collision_layer = 4
+collision_mask = 26
+mass = 5.0
+physics_material_override = SubResource("PhysicsMaterial_j8m6s")
+max_contacts_reported = 1
+contact_monitor = true
+linear_damp_mode = 1
+linear_damp = 0.07
+script = ExtResource("1_evwjx")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("2_ga0cd")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_spxjc")
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]

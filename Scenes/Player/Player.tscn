@@ -1,0 +1,66 @@
+[gd_scene load_steps=10 format=3 uid="uid://d27ck4n2p8k5q"]
+
+[ext_resource type="Script" path="res://Scenes/Player/Player.gd" id="1_glwnq"]
+[ext_resource type="Shader" path="res://Assets/Shaders/HitBlink.gdshader" id="2_auh1c"]
+[ext_resource type="Texture2D" uid="uid://cxd22g6ks181g" path="res://Assets/Sprites/Dev/icon_32x.png" id="3_3cxj7"]
+[ext_resource type="Script" path="res://Scripts/Node/Hitbox.gd" id="3_gm52i"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_f277v"]
+radius = 16.0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_f4ikq"]
+shader = ExtResource("2_auh1c")
+shader_parameter/active = false
+shader_parameter/frequency = 0.09
+shader_parameter/color = Vector4(0, 0, 0, 0)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_miys8"]
+radius = 16.0
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_jdn5d"]
+radius = 6.08276
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_df8br"]
+
+[node name="Player" type="CharacterBody2D"]
+collision_mask = 8
+script = ExtResource("1_glwnq")
+move_speed = 300.0
+jump_height = 90.0
+jump_time_to_peak = 0.3
+jump_time_to_descend = 0.34
+air_control = 1.8
+attack_distance = 32.0
+attack_mask = 4
+attack_shape = SubResource("CircleShape2D_f277v")
+
+[node name="Sprite" type="Sprite2D" parent="."]
+material = SubResource("ShaderMaterial_f4ikq")
+texture = ExtResource("3_3cxj7")
+offset = Vector2(0, -16)
+
+[node name="Collision" type="CollisionShape2D" parent="."]
+position = Vector2(0, -16)
+shape = SubResource("CircleShape2D_miys8")
+
+[node name="Hitbox" type="StaticBody2D" parent="."]
+collision_layer = 2
+collision_mask = 0
+script = ExtResource("3_gm52i")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Hitbox"]
+position = Vector2(0, -16)
+shape = SubResource("CircleShape2D_jdn5d")
+debug_color = Color(1, 0.341176, 0.309804, 0.984314)
+
+[node name="AttackCast" type="ShapeCast2D" parent="."]
+position = Vector2(0, -16)
+shape = SubResource("RectangleShape2D_df8br")
+target_position = Vector2(-24, 0)
+max_results = 1
+collision_mask = 4
+
+[node name="Invincibility" type="Timer" parent="."]
+one_shot = true
+
+[connection signal="taken_damage" from="Hitbox" to="." method="_on_taken_damage"]
