@@ -17,30 +17,30 @@ var _orb: PlayerOrb;
 
 
 func _physics_process(_delta: float) -> void:
-	if (cooldown.time_left > 0.0):
-		return;
-	
-	if (collision.is_colliding()
-			and collision.get_collider(0) is PlayerOrb):
-		var holder: OrbHolder = self;
-		if (_holders.size() > 0):
-			holder = _holders[randi_range(0, move_to_holders.size() - 1)];
-		holder.hold(collision.get_collider(0) as PlayerOrb);
+    if (cooldown.time_left > 0.0):
+        return;
+    
+    if (collision.is_colliding()
+            and collision.get_collider(0) is PlayerOrb):
+        var holder: OrbHolder = self;
+        if (_holders.size() > 0):
+            holder = _holders[randi_range(0, move_to_holders.size() - 1)];
+        holder.hold(collision.get_collider(0) as PlayerOrb);
 
 
 func hold(orb: PlayerOrb) -> void:
-	_orb = orb;
-	_orb.disable();
-	_orb.global_position = global_position;
-	_orb.teleport(global_position);
-	_orb.visible = false;
-	hold_timer.start(randf_range(min_hold_time, max_hold_time));
+    _orb = orb;
+    _orb.disable();
+    _orb.global_position = global_position;
+    _orb.teleport(global_position);
+    _orb.visible = false;
+    hold_timer.start(randf_range(min_hold_time, max_hold_time));
 
 
 func release() -> void:
-	cooldown.start();
-	_orb.enable();
-	_orb.linear_velocity = spawn_velocity;
-	hold_timer.stop();
-	_orb.visible = true;
-	_orb = null;
+    cooldown.start();
+    _orb.enable();
+    _orb.linear_velocity = spawn_velocity;
+    hold_timer.stop();
+    _orb.visible = true;
+    _orb = null;

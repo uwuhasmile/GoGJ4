@@ -87,3 +87,4 @@ count = 2
 [node name="Node" type="Node" parent="."]
 script = ExtResource("5_n8jmu")
 stream = ExtResource("6_ttlmt")
+auto_play = true

@@ -67,4 +67,7 @@ one_shot = true
 position = Vector2(0, -16)
 current = true
 
+[node name="SoundPlayer" type="AudioStreamPlayer" parent="."]
+bus = &"SFX"
+
 [connection signal="taken_damage" from="Hitbox" to="." method="_on_taken_damage"]

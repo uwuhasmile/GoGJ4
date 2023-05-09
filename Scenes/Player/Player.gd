@@ -1,5 +1,10 @@
 extends CharacterBody2D
 
+const JUMP_SOUND: AudioStream = preload("res://Assets/Sounds/Player/player_jump.ogg");
+const DAMAGE_SOUND: AudioStream = preload("res://Assets/Sounds/Player/player_damage.ogg");
+const DASH_SOUND: AudioStream = preload("res://Assets/Sounds/Player/PlayerDash.tres");
+const ATTACK_SOUND: AudioStream = preload("res://Assets/Sounds/Player/PlayerAttack.tres");
+
 const JUMP_BUFFER_TIME: float = 0.2;
 const COYOTE_TIME: float = 0.15;
 
@@ -29,6 +34,7 @@ const INVINCIBILITY_TIME: float = 2.5;
 @onready var _attack_cast: ShapeCast2D = $AttackCast;
 @onready var _inv_timer: Timer = $Invincibility;
 @onready var _sprite: Sprite2D = $Sprite;
+@onready var _sound_player: AudioStreamPlayer = $SoundPlayer;
 
 var _wish_dir: float;
 var _wants_to_attack: bool;
@@ -44,113 +50,122 @@ var _in_shock: bool;
 
 
 func _ready() -> void:
-	_in_shock = false;
-	_wish_dir = 0.0;
-	_wants_to_attack = false;
-	_jump_buffer = 0.0;
-	_coyote_time = 0.0;
-	_dash_velocity = Vector2.ZERO;
-	_jumped = false;
+    _in_shock = false;
+    _wish_dir = 0.0;
+    _wants_to_attack = false;
+    _jump_buffer = 0.0;
+    _coyote_time = 0.0;
+    _dash_velocity = Vector2.ZERO;
+    _jumped = false;
 
 
 func _process(delta: float) -> void:
-	_sprite.material.set(&"shader_parameter/active", _inv_timer.time_left > 0.0);
-	
-	if (_jump_buffer > 0.0):
-		_jump_buffer = maxf(_jump_buffer - delta, 0.0);
-	
-	if (_coyote_time > 0.0):
-		_coyote_time = maxf(_coyote_time - delta, 0.0);
-	
-	if (_dash_time > 0.0):
-		_dash_time = maxf(_dash_time - delta, 0.0);
-	
-	_wish_dir = signf(Input.get_action_strength(&"move_right") - Input.get_action_strength(&"move_left"));
-	if (Input.is_action_just_pressed(&"jump")):
-		queue_jump();
-	_wants_to_attack = Input.is_action_just_pressed(&"attack");
+    _sprite.material.set(&"shader_parameter/active", _inv_timer.time_left > 0.0);
+    
+    if (_jump_buffer > 0.0):
+        _jump_buffer = maxf(_jump_buffer - delta, 0.0);
+    
+    if (_coyote_time > 0.0):
+        _coyote_time = maxf(_coyote_time - delta, 0.0);
+    
+    if (_dash_time > 0.0):
+        _dash_time = maxf(_dash_time - delta, 0.0);
+    
+    _wish_dir = signf(Input.get_action_strength(&"move_right") - Input.get_action_strength(&"move_left"));
+    if (Input.is_action_just_pressed(&"jump")):
+        queue_jump();
+    _wants_to_attack = Input.is_action_just_pressed(&"attack");
 
 
 func _physics_process(delta: float) -> void:
-	if (_wants_to_attack):
-		queue_attack();
-	
-	if (_dash_time > 0.0):
-		_update_attack();
-	else:
-		if (not is_on_floor() and _coyote_time == 0.0 and not _jumped):
-			_coyote_time = COYOTE_TIME;
-		velocity.y += _get_gravity() * delta;
-		if (is_on_floor()):
-			if (_in_shock):
-				_in_shock = false;
-				move_and_slide();
-				return;
-			_jumped = false;
-			_dashed = false;
-			_coyote_time = 0.0;
-			velocity.x = _wish_dir * move_speed;
-		else:
-			velocity.x = lerp(velocity.x, _wish_dir * move_speed, air_control * delta);
-	
-		velocity.x = move_toward(velocity.x, minf(velocity.x, move_speed * signf(velocity.x)), delta);
-	
-		if (_jump_buffer > 0.0):
-			jump();
-	
-	move_and_slide();
-	position.x = clampf(position.x, 16.0, 464.0);
+    if (_wants_to_attack):
+        queue_attack();
+    
+    if (_dash_time > 0.0):
+        _update_attack();
+    else:
+        if (not is_on_floor() and _coyote_time == 0.0 and not _jumped):
+            _coyote_time = COYOTE_TIME;
+        velocity.y += _get_gravity() * delta;
+        if (is_on_floor()):
+            if (_in_shock):
+                _in_shock = false;
+                move_and_slide();
+                return;
+            _jumped = false;
+            _dashed = false;
+            _coyote_time = 0.0;
+            velocity.x = _wish_dir * move_speed;
+        else:
+            velocity.x = lerp(velocity.x, _wish_dir * move_speed, air_control * delta);
+    
+        velocity.x = move_toward(velocity.x, minf(velocity.x, move_speed * signf(velocity.x)), delta);
+    
+        if (_jump_buffer > 0.0):
+            jump();
+    
+    move_and_slide();
+    position.x = clampf(position.x, 16.0, 464.0);
 
 
 func jump() -> void:
-	if (is_on_floor() or (_coyote_time > 0.0 and not _jumped)):
-		_jumped = true;
-		velocity.y = -jump_velocity;
-		_coyote_time = 0.0;
-		_jump_buffer = 0.0;
+    if (is_on_floor() or (_coyote_time > 0.0 and not _jumped)):
+        _jumped = true;
+        velocity.y = -jump_velocity;
+        _coyote_time = 0.0;
+        _jump_buffer = 0.0;
+        _sound_player.stream = JUMP_SOUND;
+        _sound_player.play();
 
 
 func queue_jump() -> void:
-	if (not _in_shock):
-		_jump_buffer = JUMP_BUFFER_TIME;
+    if (not _in_shock):
+        _jump_buffer = JUMP_BUFFER_TIME;
 
 
 func queue_attack() -> void:
-	if (_in_shock):
-		return;
-	
-	if (_dash_time > 0.0):
-		return;
-	
-	if (velocity.length() > 0.0 and not _dashed):
-		_dashed = true;
-		_dash_time = dash_time;
-		_dash_velocity.x = signf(_wish_dir if _wish_dir != 0.0 else (velocity.x));
-	elif (not _dashed):
-		_dashed = true;
-		_dash_time = attack_time;
-		_dash_velocity = Vector2.ZERO;
+    if (_in_shock):
+        return;
+    if (_dash_time > 0.0):
+        return;
+    if (_dashed):
+        return;
+    
+    _dash_time = attack_time;
+    _dash_velocity = -velocity.abs().normalized() / 2.0;
+    _dashed = true;
+    
+    if velocity.x != 0.0:
+        _dash_time = dash_time;
+        _dash_velocity = Vector2(signf(_wish_dir if _wish_dir != 0.0 else (velocity.x)), 0.0);
+        _sound_player.stream = DASH_SOUND;
+    else:
+        _sound_player.stream = ATTACK_SOUND;
+    
+    _sound_player.play();
 
 
 func _on_taken_damage(result: DamageResult) -> void:
-	if (_inv_timer.time_left > 0.0 or _dash_time > 0.0):
-		return;
-	_in_shock = true;
-	_inv_timer.start(INVINCIBILITY_TIME);
-	velocity.y = -700.0;
-	velocity.x = -result.hit_velocity.x;
+    if (_inv_timer.time_left > 0.0 or _dash_time > 0.0):
+        return;
+    _in_shock = true;
+    _inv_timer.start(INVINCIBILITY_TIME);
+    velocity.y = -800.0;
+    velocity.x = clampf(result.hit_velocity.x, -move_speed / 2.0, move_speed / 2.0);
+    _sound_player.stream = DAMAGE_SOUND;
+    _sound_player.play();
 
 
 func _update_attack() -> void:
-	velocity = _dash_velocity * dash_speed;
-	var dir: Vector2 = (velocity.sign() if velocity.x != 0.0 else Vector2.UP);
-	_attack_cast.target_position = dir * attack_distance;
-	if (_attack_cast.is_colliding() and _attack_cast.get_collider(0).has_method(&"push")):
-		_attack_cast.get_collider(0).push(dir, 500.0 if velocity.x == 0.0 else absf(velocity.x));
-		_dash_time = 0.0;
+    velocity = _dash_velocity * dash_speed;
+    var dir: Vector2 = (velocity.sign() if velocity.x != 0.0 else Vector2.UP);
+    _attack_cast.target_position = dir * attack_distance;
+    if (_attack_cast.is_colliding() and _attack_cast.get_collider(0).has_method(&"push")):
+        _attack_cast.get_collider(0).push(dir, 500.0 if velocity.x == 0.0 else absf(velocity.x));
+        _dash_time = 0.0;
 
 
 func _get_gravity() -> float:
-	return -(jump_gravity if velocity.y < 0.0 else fall_gravity);
+    return -(jump_gravity if velocity.y < 0.0 else fall_gravity);
 
 

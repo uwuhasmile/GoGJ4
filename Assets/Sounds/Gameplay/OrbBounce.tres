@@ -1,0 +1,10 @@
+[gd_resource type="AudioStreamRandomizer" load_steps=2 format=3]
+
+[ext_resource type="AudioStream" uid="uid://b33ikfn8ejw1u" path="res://Assets/Sounds/Gameplay/orb_bounce.ogg" id="1_h1vvt"]
+
+[resource]
+streams_count = 1
+random_pitch = 1.2
+random_volume_offset_db = 0.0
+stream_0/stream = ExtResource("1_h1vvt")
+stream_0/weight = 1.0
