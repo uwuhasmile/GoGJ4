@@ -2,7 +2,7 @@ shader_type canvas_item;
 
 uniform bool active = false;
 uniform float frequency = 2.0;
-uniform vec4 color = vec4(1.0, 1.0, 1.0, 1.0);
+uniform vec4 color : source_color = vec4(1.0, 1.0, 1.0, 1.0);
 
 void fragment() {
     vec4 previous_color = texture(TEXTURE, UV);

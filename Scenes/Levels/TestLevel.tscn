@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3 uid="uid://b1yftwkwl52fo"]
+[gd_scene load_steps=11 format=3 uid="uid://b1yftwkwl52fo"]
 
 [ext_resource type="PackedScene" uid="uid://3qkgiwokegld" path="res://Scenes/Gameplay/Tile.tscn" id="1_5r875"]
 [ext_resource type="PackedScene" uid="uid://d27ck4n2p8k5q" path="res://Scenes/Player/Player.tscn" id="1_srjsv"]
@@ -6,6 +6,7 @@
 [ext_resource type="PackedScene" uid="uid://dproxk1e7cqri" path="res://Scenes/Gameplay/OrbHolder.tscn" id="4_1ile8"]
 [ext_resource type="Script" path="res://Scripts/Node/MusicPlayer.gd" id="5_n8jmu"]
 [ext_resource type="AudioStream" uid="uid://ks4cx3rsnvd7" path="res://Assets/Music/s1to5.ogg" id="6_ttlmt"]
+[ext_resource type="PackedScene" uid="uid://cl54d84v6m21i" path="res://Scenes/Bullet/Bullet.tscn" id="7_ntvp7"]
 
 [sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_ykr4y"]
 size = Vector2(32, 32)
@@ -52,11 +53,12 @@ position = Vector2(256, 256)
 dash_time = 0.13
 dash_speed = 900.0
 
-[node name="PlayerOrb" parent="." instance=ExtResource("2_gfe3q")]
+[node name="PlayerOrb" parent="." node_paths=PackedStringArray("start_holder") instance=ExtResource("2_gfe3q")]
 position = Vector2(216, 272)
 inertia = 6.0
 linear_velocity = Vector2(600, 0)
 constant_torque = 6.0
+start_holder = NodePath("../OrbHolder")
 
 [node name="OrbHolder" parent="." instance=ExtResource("4_1ile8")]
 position = Vector2(40, 152)
@@ -88,3 +90,8 @@ count = 2
 script = ExtResource("5_n8jmu")
 stream = ExtResource("6_ttlmt")
 auto_play = true
+
+[node name="Bullet" parent="." instance=ExtResource("7_ntvp7")]
+position = Vector2(432, 336)
+rotation = -32820.2
+data = null

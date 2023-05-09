@@ -13,6 +13,11 @@ var _tp: bool = false;
 var _tp_pos: Vector2 = Vector2.ZERO;
 
 
+func _ready() -> void:
+    if (is_instance_valid(start_holder)):
+        start_holder.hold.call_deferred(self);
+
+
 func teleport(pos: Vector2) -> void:
     _tp_pos = pos;
     _tp = true;

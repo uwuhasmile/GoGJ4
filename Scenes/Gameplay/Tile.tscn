@@ -177,3 +177,6 @@ autoplay = "orange"
 
 [node name="Collision" type="CollisionShape2D" parent="."]
 shape = SubResource("RectangleShape2D_0rv51")
+
+[node name="SoundPlayer" type="AudioStreamPlayer" parent="."]
+bus = &"SFX"

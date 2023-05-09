@@ -1,9 +1,13 @@
 extends Sprite2D
 class_name OrbHolder
 
-@onready var hold_timer: Timer = $HoldTimer;
-@onready var collision: ShapeCast2D = $Collision;
-@onready var cooldown: Timer = $Cooldown;
+const HOLD_SOUND: AudioStream = preload("res://Assets/Sounds/OrbHolder/orb_holder_hold.ogg");
+const RELEASE_SOUND: AudioStream = preload("res://Assets/Sounds/OrbHolder/orb_holder_release.ogg");
+
+@onready var _hold_timer: Timer = $HoldTimer;
+@onready var _collision: ShapeCast2D = $Collision;
+@onready var _cooldown: Timer = $Cooldown;
+@onready var _sound_player: AudioStreamPlayer2D = $SoundPlayer;
 
 @export var move_to_holders: Array[NodePath] = [];
 @export var spawn_velocity: Vector2 = Vector2(500.0, 0.0);
@@ -17,15 +21,15 @@ var _orb: PlayerOrb;
 
 
 func _physics_process(_delta: float) -> void:
-    if (cooldown.time_left > 0.0):
+    if (_cooldown.time_left > 0.0):
         return;
     
-    if (collision.is_colliding()
-            and collision.get_collider(0) is PlayerOrb):
+    if (_collision.is_colliding()
+            and _collision.get_collider(0) is PlayerOrb):
         var holder: OrbHolder = self;
         if (_holders.size() > 0):
             holder = _holders[randi_range(0, move_to_holders.size() - 1)];
-        holder.hold(collision.get_collider(0) as PlayerOrb);
+        holder.hold(_collision.get_collider(0) as PlayerOrb);
 
 
 func hold(orb: PlayerOrb) -> void:
@@ -34,13 +38,17 @@ func hold(orb: PlayerOrb) -> void:
     _orb.global_position = global_position;
     _orb.teleport(global_position);
     _orb.visible = false;
-    hold_timer.start(randf_range(min_hold_time, max_hold_time));
+    _hold_timer.start(randf_range(min_hold_time, max_hold_time));
+    _sound_player.stream = HOLD_SOUND;
+    _sound_player.play();
 
 
 func release() -> void:
-    cooldown.start();
+    _cooldown.start();
     _orb.enable();
     _orb.linear_velocity = spawn_velocity;
-    hold_timer.stop();
+    _hold_timer.stop();
     _orb.visible = true;
     _orb = null;
+    _sound_player.stream = RELEASE_SOUND;
+    _sound_player.play();

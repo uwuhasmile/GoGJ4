@@ -4,7 +4,7 @@
 [ext_resource type="Script" path="res://Scenes/Gameplay/OrbHolder.gd" id="1_tvwbp"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_lx2ne"]
-radius = 14.0
+radius = 8.0
 
 [node name="OrbHolder" type="Sprite2D"]
 texture = ExtResource("1_4bkdq")
@@ -21,5 +21,9 @@ collision_mask = 4
 [node name="Cooldown" type="Timer" parent="."]
 wait_time = 0.34
 one_shot = true
+
+[node name="SoundPlayer" type="AudioStreamPlayer2D" parent="."]
+max_distance = 800.0
+bus = &"SFX"
 
 [connection signal="timeout" from="HoldTimer" to="." method="release"]
