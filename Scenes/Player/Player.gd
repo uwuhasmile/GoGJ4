@@ -1,4 +1,5 @@
 extends CharacterBody2D
+class_name Player
 
 const JUMP_SOUND: AudioStream = preload("res://Assets/Sounds/Player/player_jump.ogg");
 const DAMAGE_SOUND: AudioStream = preload("res://Assets/Sounds/Player/player_damage.ogg");
@@ -22,8 +23,8 @@ const INVINCIBILITY_TIME: float = 2.5;
 @onready var jump_gravity: float = (-2.0 * jump_height) / (jump_time_to_peak * jump_time_to_peak);
 @onready var fall_gravity: float = (-2.0 * jump_height) / (jump_time_to_descend * jump_time_to_descend);
 
-@export var dash_time: float = 0.4;
-@export var dash_speed: float = 40.0;
+@export var dash_time: float = 0.34;
+@export var dash_speed: float = 900.0;
 @export var attack_time: float = 0.1;
 @export var attack_distance: float = 24.0;
 @export_flags_2d_physics var attack_mask: int;
@@ -36,7 +37,7 @@ const INVINCIBILITY_TIME: float = 2.5;
 @onready var _sprite: Sprite2D = $Sprite;
 @onready var _sound_player: AudioStreamPlayer = $SoundPlayer;
 
-var _wish_dir: float;
+var wish_dir: float;
 var _wants_to_attack: bool;
 
 var _jump_buffer: float;
@@ -46,12 +47,12 @@ var _dash_velocity: Vector2;
 var _dash_time: float;
 var _dashed: bool;
 
-var _in_shock: bool;
+var recently_damaged: bool;
 
 
 func _ready() -> void:
-    _in_shock = false;
-    _wish_dir = 0.0;
+    recently_damaged = false;
+    wish_dir = 0.0;
     _wants_to_attack = false;
     _jump_buffer = 0.0;
     _coyote_time = 0.0;
@@ -71,7 +72,10 @@ func _process(delta: float) -> void:
     if (_dash_time > 0.0):
         _dash_time = maxf(_dash_time - delta, 0.0);
     
-    _wish_dir = signf(Input.get_action_strength(&"move_right") - Input.get_action_strength(&"move_left"));
+    if (recently_damaged):
+        recently_damaged = false;
+    
+    wish_dir = signf(Input.get_action_strength(&"move_right") - Input.get_action_strength(&"move_left"));
     if (Input.is_action_just_pressed(&"jump")):
         queue_jump();
     _wants_to_attack = Input.is_action_just_pressed(&"attack");
@@ -88,16 +92,15 @@ func _physics_process(delta: float) -> void:
             _coyote_time = COYOTE_TIME;
         velocity.y += _get_gravity() * delta;
         if (is_on_floor()):
-            if (_in_shock):
-                _in_shock = false;
+            if (recently_damaged):
                 move_and_slide();
                 return;
             _jumped = false;
             _dashed = false;
             _coyote_time = 0.0;
-            velocity.x = _wish_dir * move_speed;
+            velocity.x = wish_dir * move_speed;
         else:
-            velocity.x = lerp(velocity.x, _wish_dir * move_speed, air_control * delta);
+            velocity.x = lerp(velocity.x, wish_dir * move_speed, air_control * delta);
     
         velocity.x = move_toward(velocity.x, minf(velocity.x, move_speed * signf(velocity.x)), delta);
     
@@ -119,12 +122,16 @@ func jump() -> void:
 
 
 func queue_jump() -> void:
-    if (not _in_shock):
+    if (not recently_damaged):
         _jump_buffer = JUMP_BUFFER_TIME;
 
 
+func is_attacking() -> bool:
+    return _dash_time > 0.0;
+
+
 func queue_attack() -> void:
-    if (_in_shock):
+    if (recently_damaged):
         return;
     if (_dash_time > 0.0):
         return;
@@ -134,10 +141,11 @@ func queue_attack() -> void:
     _dash_time = attack_time;
     _dash_velocity = -velocity.abs().normalized() / 2.0;
     _dashed = true;
+    _coyote_time = 0.0;
     
     if velocity.x != 0.0:
         _dash_time = dash_time;
-        _dash_velocity = Vector2(signf(_wish_dir if _wish_dir != 0.0 else (velocity.x)), 0.0);
+        _dash_velocity = Vector2(signf(wish_dir if wish_dir != 0.0 else (velocity.x)), 0.0);
         _sound_player.stream = DASH_SOUND;
     else:
         _sound_player.stream = ATTACK_SOUND;
@@ -148,7 +156,8 @@ func queue_attack() -> void:
 func _on_taken_damage(result: DamageResult) -> void:
     if (_inv_timer.time_left > 0.0 or _dash_time > 0.0):
         return;
-    _in_shock = true;
+    recently_damaged = true;
+    _dashed = true;
     _inv_timer.start(INVINCIBILITY_TIME);
     velocity.y = -800.0;
     velocity.x = clampf(result.hit_velocity.x, -move_speed / 2.0, move_speed / 2.0);
@@ -169,3 +178,5 @@ func _get_gravity() -> float:
     return -(jump_gravity if velocity.y < 0.0 else fall_gravity);
 
 
+func graze() -> void:
+    print("Grazed");

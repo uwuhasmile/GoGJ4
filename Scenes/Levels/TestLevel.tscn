@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3 uid="uid://b1yftwkwl52fo"]
+[gd_scene load_steps=16 format=3 uid="uid://b6r4q8bkbeepx"]
 
 [ext_resource type="PackedScene" uid="uid://3qkgiwokegld" path="res://Scenes/Gameplay/Tile.tscn" id="1_5r875"]
 [ext_resource type="PackedScene" uid="uid://d27ck4n2p8k5q" path="res://Scenes/Player/Player.tscn" id="1_srjsv"]
@@ -6,7 +6,10 @@
 [ext_resource type="PackedScene" uid="uid://dproxk1e7cqri" path="res://Scenes/Gameplay/OrbHolder.tscn" id="4_1ile8"]
 [ext_resource type="Script" path="res://Scripts/Node/MusicPlayer.gd" id="5_n8jmu"]
 [ext_resource type="AudioStream" uid="uid://ks4cx3rsnvd7" path="res://Assets/Music/s1to5.ogg" id="6_ttlmt"]
-[ext_resource type="PackedScene" uid="uid://cl54d84v6m21i" path="res://Scenes/Bullet/Bullet.tscn" id="7_ntvp7"]
+[ext_resource type="PackedScene" uid="uid://t4kcdygpjtf7" path="res://Scenes/Bullet/BulletSpawner.tscn" id="7_82duf"]
+[ext_resource type="Script" path="res://Scripts/Data/Bullet/BulletData.gd" id="8_n7ir0"]
+[ext_resource type="Texture2D" uid="uid://leie2eie8k3x" path="res://Assets/Sprites/Bullet/bullet_round_8px.png" id="9_gxpwa"]
+[ext_resource type="AudioStream" uid="uid://dgt0bve2jia18" path="res://Assets/Sounds/Misc/spawn_bullet_01.ogg" id="10_redmk"]
 
 [sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_ykr4y"]
 size = Vector2(32, 32)
@@ -16,6 +19,19 @@ size = Vector2(480, 64)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_j33sb"]
 size = Vector2(64, 16)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_8mecj"]
+
+[sub_resource type="Resource" id="Resource_smw71"]
+script = ExtResource("8_n7ir0")
+texture = ExtResource("9_gxpwa")
+shape = SubResource("CircleShape2D_8mecj")
+regular_color = Color(0.333333, 0.921569, 1, 1)
+graze_color = Color(1, 1, 0, 1)
+move_speed = 300.0
+rotation_speed = -0.5
+max_distance = 1000.0
+orb_kills = true
 
 [node name="TestLevel" type="Node2D"]
 
@@ -49,9 +65,7 @@ shape = SubResource("RectangleShape2D_j33sb")
 one_way_collision = true
 
 [node name="Player" parent="." instance=ExtResource("1_srjsv")]
-position = Vector2(256, 256)
-dash_time = 0.13
-dash_speed = 900.0
+position = Vector2(352, 216)
 
 [node name="PlayerOrb" parent="." node_paths=PackedStringArray("start_holder") instance=ExtResource("2_gfe3q")]
 position = Vector2(216, 272)
@@ -91,7 +105,17 @@ script = ExtResource("5_n8jmu")
 stream = ExtResource("6_ttlmt")
 auto_play = true
 
-[node name="Bullet" parent="." instance=ExtResource("7_ntvp7")]
-position = Vector2(432, 336)
-rotation = -32820.2
-data = null
+[node name="BulletSpawner" parent="." instance=ExtResource("7_82duf")]
+position = Vector2(224, 184)
+rotation = 1.94149
+data = Array[ExtResource("8_n7ir0")]([SubResource("Resource_smw71")])
+turn_interval_min = 1.0
+turn_interval_max = 1.0
+num_spawns = 6
+num_bullets = 4
+spawn_interval_min = 0.07
+spawn_interval_max = 0.07
+spawn_sound = ExtResource("10_redmk")
+angle_variation_min = -4.0
+angle_variation_max = 4.0
+spawn_radius_max = 48.0

@@ -3,7 +3,8 @@ class_name NodePooler
 
 var parent: Node;
 
-var max_num: int = 64;
+var max_num: int;
+var duplicate: bool;
 var nodes: Array[Node];
 var scene_to_instantiate: PackedScene;
 
@@ -17,9 +18,8 @@ func _init(p_parent, p_scene: PackedScene, p_max: int = 64) -> void:
 
 func grab() -> Node:
     var result: Node;
-    if (nodes.size() == 0):
+    if (nodes.is_empty()):
         result = scene_to_instantiate.instantiate();
-        parent.add_child(result, true);
     else:
         result = nodes.pop_front();
     

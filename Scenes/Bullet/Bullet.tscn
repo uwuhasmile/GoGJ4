@@ -1,40 +1,46 @@
-[gd_scene load_steps=9 format=3 uid="uid://cl54d84v6m21i"]
+[gd_scene load_steps=10 format=3 uid="uid://i4ocmt8tls2d"]
 
-[ext_resource type="Texture2D" uid="uid://leie2eie8k3x" path="res://Assets/Sprites/Bullet/bullet_round.png" id="1_3jorc"]
 [ext_resource type="Shader" path="res://Assets/Shaders/Recolor.gdshader" id="1_5s1vd"]
+[ext_resource type="Texture2D" uid="uid://leie2eie8k3x" path="res://Assets/Sprites/Bullet/bullet_round_8px.png" id="2_swd1u"]
 [ext_resource type="Script" path="res://Scenes/Bullet/Bullet.gd" id="3_nxo12"]
 [ext_resource type="Script" path="res://Scripts/Data/Bullet/BulletData.gd" id="4_tww0x"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_afgk5"]
+resource_local_to_scene = true
 shader = ExtResource("1_5s1vd")
 shader_parameter/color = Color(1, 1, 1, 1)
 
+[sub_resource type="CircleShape2D" id="CircleShape2D_oegjq"]
+radius = 4.0
+
 [sub_resource type="Resource" id="Resource_uxwvx"]
 script = ExtResource("4_tww0x")
-texture = ExtResource("1_3jorc")
+texture = ExtResource("2_swd1u")
+shape = SubResource("CircleShape2D_oegjq")
 regular_color = Color(1, 1, 1, 1)
 graze_color = Color(1, 1, 0, 1)
-move_speed = 25.0
+move_speed = 200.0
 rotation_speed = 5.0
-max_distance = 400.0
+max_distance = 2000.0
+orb_kills = true
 
 [sub_resource type="Curve" id="Curve_77v34"]
 min_value = -5.0
 max_value = 5.0
-_data = [Vector2(0, 1), 0.0, 558.667, 0, 1, Vector2(0.0071599, 5), 0.0, 0.0, 0, 0, Vector2(0.119332, 0.181818), -156.596, 0.0, 0, 0]
+_data = [Vector2(0, 1), 0.0, inf_neg, 0, 1, Vector2(0, 5), 0.0, 0.0, 0, 0, Vector2(0.0357995, 0.545455), -156.596, 0.0, 0, 0]
 point_count = 3
 
 [sub_resource type="Curve" id="Curve_m6bp1"]
 min_value = -5.0
 max_value = 5.0
-_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(0.0429594, -1.18182), 0.0, 0.0, 0, 0, Vector2(0.0883055, 3.54545), 0.0, 0.0, 0, 0, Vector2(0.147971, -2), 0.0, 0.0, 0, 0, Vector2(0.183771, 2.54545), 0.0, 0.0, 0, 0, Vector2(0.22673, -1.09091), 0.0, 0.0, 0, 0, Vector2(0.26253, 2.36364), 0.0, 0.0, 0, 0, Vector2(0.295943, -1.09091), 0.0, 0.0, 0, 0, Vector2(0.350835, 2.36364), 0.0, 0.0, 0, 0, Vector2(0.381862, -2.63636), 0.0, 0.0, 0, 0, Vector2(0.386635, 4.36364), 0.0, 0.0, 0, 0, Vector2(0.439141, -1.36364), 0.0, 0.0, 0, 0, Vector2(0.47494, 0.727273), 0.0, 0.0, 0, 0, Vector2(0.501193, -1.36364), 0.0, 0.0, 0, 0, Vector2(0.539379, 0.272727), 0.0, 0.0, 0, 0, Vector2(0.575179, -1.09091), 0.0, 0.0, 0, 0, Vector2(0.599045, 1), 0.0, 0.0, 0, 0, Vector2(0.630072, -1.36364), 0.0, 0.0, 0, 0, Vector2(0.658711, 1), 0.0, 0.0, 0, 0, Vector2(0.725537, -2.09091), 0.0, 0.0, 0, 0, Vector2(0.825776, 0.818182), 0.0, 0.0, 0, 0, Vector2(1, -0.818182), 0.0, 0.0, 0, 0]
-point_count = 22
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(0.0167064, -0.636364), 0.0, 0.0, 0, 0, Vector2(0.0238663, 1.36364), 0.0, 0.0, 0, 0, Vector2(0.0596659, -0.454545), 0.0, 0.0, 0, 0, Vector2(0.0644391, 1.54545), 0.0, 0.0, 0, 0, Vector2(0.0954654, -0.545455), 0.0, 0.0, 0, 0, Vector2(0.501193, -1.36364), 0.0, 0.0, 0, 0, Vector2(0.539379, 0.272727), 0.0, 0.0, 0, 0, Vector2(0.575179, -1.09091), 0.0, 0.0, 0, 0, Vector2(0.599045, 1), 0.0, 0.0, 0, 0, Vector2(0.630072, -1.36364), 0.0, 0.0, 0, 0, Vector2(0.658711, 1), 0.0, 0.0, 0, 0, Vector2(0.725537, -2.09091), 0.0, 0.0, 0, 0, Vector2(0.825776, 0.818182), 0.0, 0.0, 0, 0, Vector2(1, -0.818182), 0.0, 0.0, 0, 0]
+point_count = 15
 
 [node name="Bullet" type="Sprite2D"]
 material = SubResource("ShaderMaterial_afgk5")
-texture = ExtResource("1_3jorc")
+texture = ExtResource("2_swd1u")
 script = ExtResource("3_nxo12")
 data = SubResource("Resource_uxwvx")
-collision_mask = 3
+collision_mask = 7
 speed_change_curve = SubResource("Curve_77v34")
 rot_change_curve = SubResource("Curve_m6bp1")
