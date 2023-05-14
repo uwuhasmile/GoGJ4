@@ -11,13 +11,19 @@ config_version=5
 [application]
 
 config/name="Go Godot Jam 4 Project"
-run/main_scene="res://Scenes/Levels/TestLevel.tscn"
+run/main_scene="res://Scenes/Levels/BaseLevel.tscn"
 config/features=PackedStringArray("4.0", "Mobile")
 config/icon="res://icon.svg"
 
 [autoload]
 
 MusicPlayer="*res://Scenes/Global/MusicPlayer.tscn"
+Game="*res://Scripts/Global/Game.gd"
+Screens="*res://Scenes/Global/Screens.tscn"
+
+[debug]
+
+gdscript/warnings/native_method_override=1
 
 [display]
 

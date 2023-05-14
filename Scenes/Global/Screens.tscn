@@ -1,0 +1,33 @@
+[gd_scene load_steps=4 format=3 uid="uid://doqslb5gw582h"]
+
+[ext_resource type="PackedScene" uid="uid://cacvkh0sntuwq" path="res://Scenes/Screens/ChapterResult.tscn" id="1_4wyib"]
+[ext_resource type="Script" path="res://Scenes/Global/Screens.gd" id="1_tfu0k"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_kvbc0"]
+content_margin_left = 0.0
+content_margin_top = 0.0
+content_margin_right = 0.0
+content_margin_bottom = 0.0
+
+[node name="Screens" type="CanvasLayer"]
+process_mode = 3
+layer = 4
+script = ExtResource("1_tfu0k")
+
+[node name="Tabs" type="TabContainer" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxEmpty_kvbc0")
+tab_alignment = 1
+clip_tabs = false
+tabs_visible = false
+
+[node name="Empty" type="Control" parent="Tabs"]
+layout_mode = 2
+
+[node name="ChapterResult" parent="Tabs" instance=ExtResource("1_4wyib")]
+visible = false
+layout_mode = 2

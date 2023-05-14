@@ -18,8 +18,8 @@ func _ready() -> void:
         start_holder.hold.call_deferred(self);
 
 
-func teleport(pos: Vector2) -> void:
-    _tp_pos = pos;
+func teleport(p_pos: Vector2) -> void:
+    _tp_pos = p_pos;
     _tp = true;
 
 
@@ -35,9 +35,9 @@ func enable() -> void:
     collision.set_deferred(&"disabled", false);
 
 
-func _integrate_forces(state: PhysicsDirectBodyState2D) -> void:
+func _integrate_forces(p_state: PhysicsDirectBodyState2D) -> void:
     if (_tp):
-        state.transform = Transform2D(0.0, _tp_pos);
+        p_state.transform = Transform2D(0.0, _tp_pos);
         _tp = false;
 
 
@@ -50,13 +50,13 @@ func _physics_process(_d: float) -> void:
         linear_velocity = linear_velocity.bounce(Vector2.RIGHT);
 
 
-func push(n: Vector2, power: float = 1.0) -> void:
-    linear_velocity = (n * power - Vector2(0.0, power / 2.0)).rotated(randf_range(PI / -8, PI / 8));
+func push(p_n: Vector2, p_power: float = 1.0) -> void:
+    linear_velocity = (p_n * p_power - Vector2(0.0, p_power / 2.0)).rotated(randf_range(PI / -8, PI / 8));
 
 
-func _on_body_entered(body: Node) -> void:
+func _on_body_entered(p_body: Node) -> void:
     sound_player.stream = BOUNCE_STREAM;
     sound_player.play();
-    if (body.has_method(&"take_damage")):
+    if (p_body.has_method(&"take_damage")):
         var result: DamageResult = DamageResult.new(25.0, self, self, linear_velocity);
-        body.take_damage(result);
+        p_body.take_damage(result);

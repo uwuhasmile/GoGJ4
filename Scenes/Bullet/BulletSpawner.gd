@@ -129,3 +129,7 @@ func stop() -> void:
         _spawn_timer.timeout.disconnect(_play_turn_internal);
     _turns_timer.stop();
     _spawn_timer.stop();
+
+
+func _exit_tree() -> void:
+    stop();

@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="Story" load_steps=3 format=3 uid="uid://crhao681sf7dx"]
+
+[ext_resource type="Resource" uid="uid://c8mq8jwvregog" path="res://Assets/Story/Chapter.tres" id="1_041u2"]
+[ext_resource type="Script" path="res://Scripts/Data/Game/Story.gd" id="1_w6oj2"]
+
+[resource]
+script = ExtResource("1_w6oj2")
+chapters = Array[Resource("res://Scripts/Data/Game/Chapter.gd")]([ExtResource("1_041u2")])
+endings = Array[Resource("res://Scripts/Data/Game/Ending.gd")]([])

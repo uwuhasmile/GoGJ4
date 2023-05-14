@@ -32,8 +32,8 @@ func _physics_process(_delta: float) -> void:
         holder.hold(_collision.get_collider(0) as PlayerOrb);
 
 
-func hold(orb: PlayerOrb) -> void:
-    _orb = orb;
+func hold(p_orb: PlayerOrb) -> void:
+    _orb = p_orb;
     _orb.disable();
     _orb.global_position = global_position;
     _orb.teleport(global_position);

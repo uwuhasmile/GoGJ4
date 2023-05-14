@@ -88,7 +88,7 @@ func _physics_process(delta: float) -> void:
     if (_dash_time > 0.0):
         _update_attack();
     else:
-        if (not is_on_floor() and _coyote_time == 0.0 and not _jumped):
+        if (not is_on_floor() and _coyote_time <= 0.0 and not _jumped):
             _coyote_time = COYOTE_TIME;
         velocity.y += _get_gravity() * delta;
         if (is_on_floor()):
@@ -153,14 +153,15 @@ func queue_attack() -> void:
     _sound_player.play();
 
 
-func _on_taken_damage(result: DamageResult) -> void:
+func _on_taken_damage(p_result: DamageResult) -> void:
     if (_inv_timer.time_left > 0.0 or _dash_time > 0.0):
         return;
     recently_damaged = true;
     _dashed = true;
+    _jumped = true;
     _inv_timer.start(INVINCIBILITY_TIME);
     velocity.y = -800.0;
-    velocity.x = clampf(result.hit_velocity.x, -move_speed / 2.0, move_speed / 2.0);
+    velocity.x = clampf(p_result.hit_velocity.x, -move_speed / 2.0, move_speed / 2.0);
     _sound_player.stream = DAMAGE_SOUND;
     _sound_player.play();
 

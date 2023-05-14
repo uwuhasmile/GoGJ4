@@ -1,0 +1,16 @@
+[gd_scene load_steps=3 format=3 uid="uid://b6r4q8bkbeepx"]
+
+[ext_resource type="PackedScene" uid="uid://d27ck4n2p8k5q" path="res://Scenes/Player/Player.tscn" id="1_g3nuv"]
+[ext_resource type="PackedScene" uid="uid://b38n21fhsnhmb" path="res://Scenes/Player/PlayerOrb.tscn" id="2_1u6xi"]
+
+[node name="TestLevel" type="Node2D"]
+
+[node name="Player" parent="." instance=ExtResource("1_g3nuv")]
+position = Vector2(224, 192)
+
+[node name="PlayerOrb" parent="." node_paths=PackedStringArray("start_holder") instance=ExtResource("2_1u6xi")]
+position = Vector2(96, 40)
+inertia = 6.0
+linear_velocity = Vector2(600, 0)
+constant_torque = 6.0
+start_holder = NodePath("")

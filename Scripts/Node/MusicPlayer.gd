@@ -10,16 +10,16 @@ func _ready() -> void:
         play(0.0);
 
 
-func play(vol: float = 0.0) -> void:
+func play(p_volume: float = 0.0) -> void:
     if (only_if_not_playing
             and MusicPlayer.last_stream == stream
             and MusicPlayer.is_playing()):
         return;
-    MusicPlayer.play(stream, vol);
+    MusicPlayer.play(stream, p_volume);
 
 
-func play_last(vol: float = 0.0) -> void:
+func play_last(p_volume: float = 0.0) -> void:
     if MusicPlayer.last_stream == null:
-        MusicPlayer.play(stream, vol);
+        MusicPlayer.play(stream, p_volume);
     else:
-        MusicPlayer.play_last(vol);
+        MusicPlayer.play_last(p_volume);

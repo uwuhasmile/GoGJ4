@@ -277,6 +277,7 @@ shader = ExtResource("2_auh1c")
 shader_parameter/active = false
 shader_parameter/frequency = 0.09
 shader_parameter/color = Vector4(0, 0, 0, 0)
+shader_parameter/blend = Vector3(1, 1, 1)
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_nn80o"]
 radius = 15.0

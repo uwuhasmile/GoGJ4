@@ -1,0 +1,18 @@
+[gd_resource type="Resource" script_class="Chapter" load_steps=6 format=3]
+
+[ext_resource type="AudioStream" uid="uid://ks4cx3rsnvd7" path="res://Assets/Music/s1to5.ogg" id="1_d2qqa"]
+[ext_resource type="Script" path="res://Scripts/Data/Game/Chapter.gd" id="1_tq0ms"]
+[ext_resource type="PackedScene" uid="uid://b6r4q8bkbeepx" path="res://Scenes/Levels/BaseLevel.tscn" id="2_bpvkk"]
+[ext_resource type="Script" path="res://Scripts/Data/Game/Level.gd" id="3_x57lf"]
+
+[sub_resource type="Resource" id="Resource_ijv1c"]
+script = ExtResource("3_x57lf")
+scene = ExtResource("2_bpvkk")
+music = ExtResource("1_d2qqa")
+title = "Stage 0"
+subtitle = ""
+stop_music_on_start = true
+
+[resource]
+script = ExtResource("1_tq0ms")
+levels = Array[ExtResource("3_x57lf")]([SubResource("Resource_ijv1c")])
